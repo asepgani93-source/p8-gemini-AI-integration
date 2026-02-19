@@ -1,0 +1,167 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Live Grammar Checker</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- 
+    ============================================
+    LIVE GRAMMAR CHECKER PAGE
+    ============================================
+    Studi Kasus 2: Menggunakan Observable dengan RxJS Operators
+    
+    Fitur:
+    - Pengecek grammar real-time
+    - Tanpa tombol "Cek" - otomatis saat mengetik
+    - Debounce 1 detik untuk menghemat API call
+    - SwitchMap untuk cancel request lama
+  -->
+
+  <!-- Page header -->
+  <div class="page-header">
+    <h1>Live Grammar Checker</h1>
+    <p>Ketik dalam bahasa Inggris, AI akan memeriksa grammar secara otomatis</p>
+  </div>
+
+  <!-- Textarea input -->
+  <div class="input-section">
+    <div class="textarea-header">
+      <ion-chip color="primary" class="input-label">
+        <ion-icon name="language"></ion-icon>
+        <ion-label>Teks Bahasa Inggris</ion-label>
+      </ion-chip>
+      
+      <!-- Character count -->
+      <span class="char-count" [class.warning]="userText.length > 500">
+        {{ userText.length }} karakter
+      </span>
+    </div>
+
+    <textarea
+      [(ngModel)]="userText"
+      (ngModelChange)="onTextChange($event)"
+      placeholder="Ketik kalimat bahasa Inggris di sini...&#10;Contoh: She don't like apples.&#10;AI akan memeriksa grammar secara otomatis setelah Anda berhenti mengetik 1 detik."
+      class="grammar-textarea"
+      rows="6"
+    ></textarea>
+
+    <!-- Clear button -->
+    <div class="textarea-actions" *ngIf="userText">
+      <ion-button fill="clear" size="small" (click)="clearText()" color="medium">
+        Hapus Teks
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Status bar -->
+  <div class="status-bar" *ngIf="userText.trim()">
+    <!-- Checking indicator -->
+    <div *ngIf="isChecking" class="checking-status">
+      <ion-spinner name="dots" color="success"></ion-spinner>
+      <span>Memeriksa grammar...</span>
+    </div>
+
+    <!-- Debounce indicator -->
+    <div *ngIf="!isChecking && !grammarResult && !errorMessage" class="waiting-status">
+      <ion-icon name="time" color="medium"></ion-icon>
+      <span>Menunggu Anda berhenti mengetik...</span>
+    </div>
+
+    <!-- Last checked time -->
+    <div *ngIf="lastChecked && !isChecking" class="last-checked">
+      <ion-icon name="time" color="medium"></ion-icon>
+      <span>Terakhir diperiksa: {{ getFormattedTime() }}</span>
+    </div>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="errorMessage" class="error-message">
+    <ion-icon name="close-circle" color="danger"></ion-icon>
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <!-- Grammar result -->
+  <div *ngIf="grammarResult && !isChecking" class="result-section">
+    <ion-card [class]="'result-card ' + (grammarResult.status === 'Correct' ? 'correct' : 'incorrect')">
+      <ion-card-content>
+        <!-- Status badge -->
+        <div class="result-header">
+          <ion-badge [color]="getStatusColor()" class="status-badge">
+            <ion-icon [name]="grammarResult.status === 'Correct' ? 'checkmark-circle' : 'close-circle'"></ion-icon>
+            {{ grammarResult.status === 'Correct' ? 'Grammar Benar' : 'Grammar Salah' }}
+          </ion-badge>
+        </div>
+
+        <!-- Original text -->
+        <div class="original-text-section">
+          <h4>Teks Asli:</h4>
+          <p class="original-text">"{{ grammarResult.originalText }}"</p>
+        </div>
+
+        <!-- Correction/Explanation -->
+        <div class="correction-section">
+          <h4>{{ grammarResult.status === 'Correct' ? 'Penjelasan:' : 'Koreksi:' }}</h4>
+          <p class="correction-text">{{ grammarResult.correction }}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Info section -->
+  <div class="info-section">
+    <ion-card class="tech-info-card">
+      <ion-card-content>
+        <h3>🔧 Teknis: Observable dengan RxJS</h3>
+        
+        <div class="operator-list">
+          <div class="operator-item">
+            <ion-chip color="primary">
+              <ion-label>debounceTime(1000)</ion-label>
+            </ion-chip>
+            <p>Tunggu 1 detik setelah user berhenti mengetik</p>
+          </div>
+          
+          <div class="operator-item">
+            <ion-chip color="secondary">
+              <ion-label>distinctUntilChanged()</ion-label>
+            </ion-chip>
+            <p>Hanya proses jika teks berbeda dari sebelumnya</p>
+          </div>
+          
+          <div class="operator-item">
+            <ion-chip color="tertiary">
+              <ion-label>switchMap()</ion-label>
+            </ion-chip>
+            <p>Cancel request lama jika user mengetik lagi</p>
+          </div>
+          
+          <div class="operator-item">
+            <ion-chip color="success">
+              <ion-label>catchError()</ion-label>
+            </ion-chip>
+            <p>Handle error tanpa menghentikan stream</p>
+          </div>
+        </div>
+
+        <div class="workflow-diagram">
+          <h4>Alur Kerja:</h4>
+          <div class="workflow-steps">
+            <div class="step">User mengetik</div>
+            <div class="arrow">→</div>
+            <div class="step">Debounce 1s</div>
+            <div class="arrow">→</div>
+            <div class="step">Cancel request lama</div>
+            <div class="arrow">→</div>
+            <div class="step">Kirim ke AI</div>
+            <div class="arrow">→</div>
+            <div class="step">Update UI</div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
