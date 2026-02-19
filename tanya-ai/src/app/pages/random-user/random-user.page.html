@@ -1,0 +1,131 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Random User Generator</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- 
+    ============================================
+    RANDOM USER GENERATOR PAGE
+    ============================================
+    Studi Kasus 1: Menggunakan Promise (async/await)
+    
+    Fitur:
+    - Generate profil user palsu
+    - Menggunakan Promise dengan lastValueFrom()
+    - Tampilan kartu profil yang menarik
+  -->
+
+  <!-- Header section -->
+  <div class="page-header">
+    <h1>Random User Generator</h1>
+    <p>Generate data profil palsu untuk keperluan testing</p>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p>Mengambil data...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="errorMessage && !isLoading" class="error-container">
+    <ion-icon name="alert-circle" color="danger" class="error-icon"></ion-icon>
+    <p>{{ errorMessage }}</p>
+    <ion-button (click)="generateUser()" fill="outline" color="primary">
+      Coba Lagi
+    </ion-button>
+  </div>
+
+  <!-- User card -->
+  <ion-card *ngIf="user && !isLoading" class="user-card">
+    <ion-card-content>
+      <!-- Avatar -->
+      <div class="avatar-container">
+        <img
+          [src]="user.picture.large"
+          [alt]="getFullName()"
+          class="user-avatar"
+          title="{{ getFullName() }}"
+        />
+        <ion-chip [color]="user.gender === 'male' ? 'primary' : 'secondary'" class="gender-chip">
+          {{ user.gender === 'male' ? 'Laki-laki' : 'Perempuan' }}
+        </ion-chip>
+      </div>
+
+      <!-- Name -->
+      <h2 class="user-name">{{ getFullName() }}</h2>
+
+      <!-- Email -->
+      <div class="info-row">
+        <ion-icon name="mail" color="medium"></ion-icon>
+        <span>{{ user.email }}</span>
+      </div>
+
+      <!-- Phone -->
+      <div class="info-row">
+        <ion-icon name="call" color="medium"></ion-icon>
+        <span>{{ user.phone }}</span>
+      </div>
+
+      <!-- Address -->
+      <div class="info-row">
+        <ion-icon name="location" color="medium"></ion-icon>
+        <span>{{ getFullAddress() }}</span>
+      </div>
+
+      <!-- Birth date & Age -->
+      <div class="info-row">
+        <ion-icon name="calendar" color="medium"></ion-icon>
+        <span>{{ getFormattedDate(user.dob.date) }} ({{ user.dob.age }} tahun)</span>
+      </div>
+
+      <!-- Nationality -->
+      <div class="nationality-badge">
+        <ion-chip color="light">
+          <ion-label>Nationality: {{ user.nat }}</ion-label>
+        </ion-chip>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Generate button -->
+  <div class="button-container">
+    <ion-button
+      (click)="generateUser()"
+      expand="block"
+      size="large"
+      color="primary"
+      [disabled]="isLoading"
+      class="generate-button"
+    >
+      <ion-icon name="refresh" slot="start"></ion-icon>
+      Generate User Baru
+    </ion-button>
+  </div>
+
+  <!-- Info section -->
+  <div class="info-section">
+    <ion-card class="info-card">
+      <ion-card-content>
+        <h3>💡 Info Teknis</h3>
+        <p>
+          <strong>Menggunakan Promise (async/await)</strong>
+        </p>
+        <ul>
+          <li>HttpClient mengembalikan Observable</li>
+          <li>Di-convert ke Promise dengan <code>lastValueFrom()</code></li>
+          <li>Cocok untuk aksi sekali klik = satu data</li>
+          <li>Kode lebih readable dengan async/await</li>
+        </ul>
+        <p class="api-source">
+          API: <a href="https://randomuser.me" target="_blank" rel="noopener noreferrer">randomuser.me</a>
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

@@ -1,0 +1,156 @@
+/* ============================================
+   STYLING UNTUK CHATBOT AI
+   ============================================ */
+
+/* Welcome message styling */
+.welcome-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: #666;
+  padding: 32px;
+}
+
+.welcome-message h2 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.welcome-message p {
+  margin: 4px 0;
+}
+
+/* Chat bubble styles */
+.chat-user {
+  background-color: #e3f2fd;
+  padding: 12px 16px;
+  border-radius: 18px 18px 4px 18px;
+  margin-left: auto;
+  max-width: 80%;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.chat-ai {
+  background-color: #f1f1f1;
+  padding: 12px 16px;
+  border-radius: 18px 18px 18px 4px;
+  margin-right: auto;
+  max-width: 80%;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Label styling */
+ion-label p strong {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.chat-user ion-label p strong {
+  color: #3880ff;
+}
+
+.chat-ai ion-label p strong {
+  color: #2dd36f;
+}
+
+/* Message text */
+.message-text {
+  white-space: pre-wrap;
+  line-height: 1.5;
+  color: #333;
+}
+
+/* Loading indicator */
+.loading-item {
+  --background: transparent;
+}
+
+.loading-dots {
+  display: flex;
+  align-items: center;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Input container styling */
+.input-container {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --inner-padding-end: 8px;
+}
+
+.chat-input {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --background: #f5f5f5;
+  border-radius: 24px;
+  margin-right: 8px;
+}
+
+/* Ion list styling */
+ion-list {
+  background: transparent;
+  padding: 8px;
+}
+
+ion-item {
+  --background: transparent;
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+}
+
+/* Footer styling */
+ion-footer {
+  ion-toolbar {
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+  }
+}
+
+/* Scrollbar styling */
+ion-content::part(scroll) {
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .chat-user,
+  .chat-ai {
+    max-width: 90%;
+    padding: 10px 12px;
+  }
+  
+  .welcome-message {
+    padding: 16px;
+  }
+  
+  .welcome-message h2 {
+    font-size: 20px;
+  }
+}
+
+/* Animation for new messages */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+ion-item {
+  animation: fadeIn 0.3s ease;
+}

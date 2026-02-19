@@ -1,0 +1,58 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Build outputs
+/dist
+/www
+/build
+/.angular
+/.ionic
+
+# Environment files (penting untuk keamanan API key!)
+/src/environments/environment*.ts
+!.src/environments/environment.sample.ts
+/src/services/geminiService.ts
+# IDE
+/.idea
+/.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+/coverage
+/.nyc_output
+
+# Misc
+*.log
+*.tmp
+*.temp
+.cache
+.parcel-cache
+
+# Capacitor / Cordova
+/android
+/ios
+/resources/android
+/resources/ios
+
+# Firebase
+.firebase
+.firebaserc
+
+# Vite (khusus untuk project app)
+/.vite

@@ -1,0 +1,79 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Tanya Pak AI</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- 
+    ============================================
+    AREA CHAT
+    ============================================
+    Menampilkan riwayat percakapan antara user dan AI
+  -->
+  
+  <!-- Pesan selamat datang jika belum ada chat -->
+  <div *ngIf="chatHistory.length === 0" class="welcome-message">
+    <ion-icon name="chatbubbles" style="font-size: 64px; color: #ccc;"></ion-icon>
+    <h2>Selamat Datang!</h2>
+    <p>Mulai percakapan dengan AI Gemini.</p>
+    <p style="font-size: 14px; color: #888;">
+      Contoh: "Buatkan puisi tentang kopi"<br>
+      atau "Jelaskan apa itu Ionic"
+    </p>
+  </div>
+  
+  <!-- List chat history -->
+  <ion-list lines="none" *ngIf="chatHistory.length > 0">
+    <ion-item *ngFor="let msg of chatHistory">
+      <div [class]="msg.role === 'user' ? 'chat-user' : 'chat-ai'">
+        <ion-label class="ion-text-wrap">
+          <p><strong>{{ msg.role === 'user' ? 'Saya' : 'Bot AI' }}</strong></p>
+          <div class="message-text">{{ msg.text }}</div>
+        </ion-label>
+      </div>
+    </ion-item>
+    
+    <!-- Loading indicator saat AI sedang mengetik -->
+    <ion-item *ngIf="isLoading" class="loading-item">
+      <div class="chat-ai">
+        <ion-label>
+          <p><strong>Bot AI</strong></p>
+          <div class="loading-dots">
+            <ion-spinner name="dots"></ion-spinner>
+            <span class="ion-margin-start">Sedang mengetik...</span>
+          </div>
+        </ion-label>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-item lines="none" class="input-container">
+      <!-- Input field untuk pesan user -->
+      <ion-input
+        placeholder="Tulis pertanyaan..."
+        [(ngModel)]="userInput"
+        (keypress)="handleKeyPress($event)"
+        [disabled]="isLoading"
+        class="chat-input"
+      ></ion-input>
+      
+      <!-- Tombol kirim -->
+      <ion-button
+        slot="end"
+        (click)="kirimPesan()"
+        [disabled]="isLoading || !userInput.trim()"
+        shape="round"
+        color="tertiary"
+      >
+        <ion-icon name="send" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>
